@@ -17,7 +17,7 @@ Features
 --------
 
 * Supports 4 call types to Quandl: `GetSymbol`, `GetSymbols`, `GetList` and `GetSearch`
-* Returns either a native Go object, or a raw (CSV/JSON/XML)
+* Returns either a native [Go object](https://github.com/DannyBen/quandl/blob/master/quandlResponseTypes.go), or a raw (CSV/JSON/XML)
   response.
 * Support for cache handling.
 
