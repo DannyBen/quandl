@@ -43,63 +43,63 @@ type Cacher interface {
 }
 
 // GetSymbol returns data for a given symbol
-func GetSymbol(symbol string, params Options) (SymbolResponse, error) {
+func GetSymbol(symbol string, params Options) (*SymbolResponse, error) {
 	raw, err := GetSymbolRaw(symbol, "json", params)
 	var response SymbolResponse
 	if err != nil {
-		return response, err
+		return &response, err
 	}
 
 	err = json.Unmarshal(raw, &response)
 	if err != nil {
-		return response, marshallerError(raw, err)
+		return &response, marshallerError(raw, err)
 	}
-	return response, nil
+	return &response, nil
 }
 
 // GetSymbols returns data for a symbols array
-func GetSymbols(symbols []string, params Options) (SymbolsResponse, error) {
+func GetSymbols(symbols []string, params Options) (*SymbolsResponse, error) {
 	raw, err := GetSymbolsRaw(symbols, "json", params)
 	var response SymbolsResponse
 	if err != nil {
-		return response, err
+		return &response, err
 	}
 
 	err = json.Unmarshal(raw, &response)
 	if err != nil {
-		return response, marshallerError(raw, err)
+		return &response, marshallerError(raw, err)
 	}
-	return response, nil
+	return &response, nil
 }
 
 // GetList returns a list of symbols for a source
-func GetList(source string, page int, perPage int) (ListResponse, error) {
+func GetList(source string, page int, perPage int) (*ListResponse, error) {
 	raw, err := GetListRaw(source, "json", page, perPage)
 	var response ListResponse
 	if err != nil {
-		return response, err
+		return &response, err
 	}
 
 	err = json.Unmarshal(raw, &response)
 	if err != nil {
-		return response, marshallerError(raw, err)
+		return &response, marshallerError(raw, err)
 	}
-	return response, nil
+	return &response, nil
 }
 
 // GetSearch returns search results
-func GetSearch(query string, page int, perPage int) (SearchResponse, error) {
+func GetSearch(query string, page int, perPage int) (*SearchResponse, error) {
 	raw, err := GetSearchRaw(query, "json", page, perPage)
 	var response SearchResponse
 	if err != nil {
-		return response, err
+		return &response, err
 	}
 
 	err = json.Unmarshal(raw, &response)
 	if err != nil {
-		return response, marshallerError(raw, err)
+		return &response, marshallerError(raw, err)
 	}
-	return response, nil
+	return &response, nil
 }
 
 // GetSymbolRaw returns CSV, JSON or XML data for a given symbol
