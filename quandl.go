@@ -185,7 +185,9 @@ func arrangeParams(qs Options) string {
 		}
 		qs = Options{}
 	}
-	qs.Set("auth_token", ApiKey)
+	if ApiKey != "" {
+		qs.Set("auth_token", ApiKey)
+	}
 	return url.Values(qs).Encode()
 }
 
