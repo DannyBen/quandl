@@ -5,6 +5,9 @@ This library provides easy access to the
 [Quandl API](https://www.quandl.com/help/api) 
 using the Go programming language.
 
+The full documentation is at:  
+[godoc.org/github.com/DannyBen/quandl](http://godoc.org/github.com/DannyBen/quandl)
+
 Install
 -------
 
@@ -13,8 +16,7 @@ Install
 Features
 --------
 
-* Supports 4 call types to Quandl:  
-  `GetSymbol`, `GetSymbols`, `GetList` and `GetSearch`
+* Supports 4 call types to Quandl: `GetSymbol`, `GetSymbols`, `GetList` and `GetSearch`
 * Returns either a native Go object, or a raw (CSV/JSON/XML)
   response.
 * Support for cache handling.
