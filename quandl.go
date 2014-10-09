@@ -110,7 +110,7 @@ func GetSymbolRaw(symbol string, format string, params Options) ([]byte, error) 
 
 // GetSymbolsRaw returns CSV, JSON or XML data for multiple symbols
 func GetSymbolsRaw(symbols []string, format string, params Options) ([]byte, error) {
-	url := getUrl("symbols", "json", symbolsToString(symbols), arrangeParams(params))
+	url := getUrl("symbols", format, symbolsToString(symbols), arrangeParams(params))
 	return getData(url)
 }
 
@@ -123,7 +123,7 @@ func GetListRaw(source string, format string, page int, perPage int) ([]byte, er
 	params.Set("per_page", strconv.Itoa(perPage))
 	params.Set("page", strconv.Itoa(page))
 
-	url := getUrl("list", "json", arrangeParams(params))
+	url := getUrl("list", format, arrangeParams(params))
 	return getData(url)
 }
 
@@ -131,17 +131,20 @@ func GetListRaw(source string, format string, page int, perPage int) ([]byte, er
 func GetSearchRaw(query string, format string, page int, perPage int) ([]byte, error) {
 	params := Options{}
 
+	if format == "csv" {
+		format = "json"
+	}
+
 	params.Set("query", query)
 	params.Set("per_page", strconv.Itoa(perPage))
 	params.Set("page", strconv.Itoa(page))
 
-	url := getUrl("search", "json", arrangeParams(params))
+	url := getUrl("search", format, arrangeParams(params))
 	return getData(url)
 }
 
 // getData requests a URL from Quandl and returns the raw response string
 func getData(url string) ([]byte, error) {
-
 	if CacheHandler != nil {
 		if response := CacheHandler.Get(url); response != nil {
 			return response, nil
