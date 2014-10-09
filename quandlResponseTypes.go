@@ -1,40 +1,5 @@
 package quandl
 
-// Type Document represents an entity at Quandl
-// It is used when requesting a symbol data, or a list of
-// symbols supported by a data source.
-type Document struct {
-	ColumnNames []string `json:"column_names"`
-	Errors      interface{}
-	Id          int
-	SourceName  string `json:"source_name"`
-	SourceCode  string `json:"source_code"`
-	Code        string
-	Name        string
-	UrlizeName  string `json:"urlize_name"`
-	DisplayUrl  string `json:"display_url"`
-	Description string
-	UpdatedAt   string `json:"updated_at"`
-	Frequency   string
-	FromDate    string `json:"from_date"`
-	ToDate      string `json:"to_date"`
-	Private     bool
-	Type        string
-	Premium     bool
-}
-
-// Type Source represents a data source.
-// Used by Search Response
-type Source struct {
-	Id            int
-	Code          string
-	DataSetsCount int `json:"datasets_count"`
-	Description   string
-	Name          string
-	Host          string
-	Premium       bool
-}
-
 // Type SymbolResponse represents the response from Quandl
 // when requesting a single symbol
 type SymbolResponse struct {
@@ -68,4 +33,39 @@ type SymbolsResponse struct {
 	Frequency   string
 	FromDate    string `json:"from_date"`
 	ToDate      string `json:"to_date"`
+}
+
+// Type Document represents an entity at Quandl
+// It is used when requesting a symbol data, or a list of
+// symbols supported by a data source.
+type Document struct {
+	ColumnNames []string `json:"column_names"`
+	Errors      interface{}
+	Id          int
+	SourceName  string `json:"source_name"`
+	SourceCode  string `json:"source_code"`
+	Code        string
+	Name        string
+	UrlizeName  string `json:"urlize_name"`
+	DisplayUrl  string `json:"display_url"`
+	Description string
+	UpdatedAt   string `json:"updated_at"`
+	Frequency   string
+	FromDate    string `json:"from_date"`
+	ToDate      string `json:"to_date"`
+	Private     bool
+	Type        string
+	Premium     bool
+}
+
+// Type Source represents a data source.
+// Used by Search Response
+type Source struct {
+	Id            int
+	Code          string
+	DataSetsCount int `json:"datasets_count"`
+	Description   string
+	Name          string
+	Host          string
+	Premium       bool
 }
