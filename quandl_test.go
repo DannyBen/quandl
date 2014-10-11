@@ -138,7 +138,7 @@ func ExampleSymbolResponse() {
 	fmt.Println(data.UpdatedAt[:3], "...")
 	fmt.Println(data.Frequency)
 	fmt.Println(data.FromDate)
-	fmt.Println(data.ToDate)
+	fmt.Println(data.ToDate[:3], "...")
 	fmt.Println(data.Private)
 	fmt.Println(data.Type)
 	fmt.Println(data.Premium)
@@ -158,7 +158,7 @@ func ExampleSymbolResponse() {
 	// 201 ...
 	// daily
 	// 1986-03-13
-	// 2014-10-08
+	// 201 ...
 	// false
 	//
 	// false
