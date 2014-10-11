@@ -26,7 +26,8 @@ var urlTemplates map[string]string = map[string]string{
 	"symbol":  "https://www.quandl.com/api/v1/datasets/%s.%s?%s",
 	"symbols": "https://www.quandl.com/api/v1/multisets.%s?columns=%s&%s",
 	"search":  "https://www.quandl.com/api/v1/datasets.%s?%s",
-	"list":    "http://www.quandl.com/api/v2/datasets.%s?%s",
+	"list":    "https://www.quandl.com/api/v2/datasets.%s?%s",
+	// "favs":    "https://www.quandl.com/api/v1/current_user/collections/datasets/favourites.%s?auth_token=%s",
 }
 
 // Type Options is used to send additional parameters in the Quandl request
@@ -131,6 +132,7 @@ func GetListRaw(source string, format string, page int, perPage int) ([]byte, er
 func GetSearchRaw(query string, format string, page int, perPage int) ([]byte, error) {
 	params := Options{}
 
+	// TODO: Remove when Quandl fixes this bug
 	if format == "csv" {
 		format = "json"
 	}
