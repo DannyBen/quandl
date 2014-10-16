@@ -19,7 +19,6 @@ var LastUrl = ""
 
 // CacheHandler is a reference to a struct that implements the Cacher interface.
 // If set, it will use it to get documents from the cache or set to it.
-// See the example cache handler in the quandl/cache package.
 var CacheHandler Cacher
 
 var urlTemplates map[string]string = map[string]string{

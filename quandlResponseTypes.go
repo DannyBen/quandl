@@ -35,7 +35,7 @@ type SymbolsResponse struct {
 	ToDate      string `json:"to_date"`
 }
 
-// Type Document represents an entity at Quandl
+// Type Document represents an entity at Quandl.
 // It is used when requesting a symbol data, or a list of
 // symbols supported by a data source.
 type Document struct {
