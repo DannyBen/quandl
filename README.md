@@ -1,6 +1,8 @@
 Go Quandl
 =========
 
+[![GoDoc](https://godoc.org/github.com/DannyBen/quandl?status.png)](http://godoc.org/github.com/DannyBen/quandl)
+
 This library provides easy access to the 
 [Quandl API](https://www.quandl.com/help/api) 
 using the Go programming language.

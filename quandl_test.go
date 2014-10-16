@@ -11,7 +11,7 @@ var apiKey = "PUT_KEY_HERE"
 func ExampleGetSymbol() {
 	// This block is optional
 	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{"./cache", 60}
+	quandl.CacheHandler = filecache.Handler{Life: 60}
 	v := quandl.Options{}
 	v.Set("trim_start", "2014-01-01")
 	v.Set("trim_end", "2014-02-02")
@@ -32,7 +32,7 @@ func ExampleGetSymbol() {
 func ExampleGetSymbolRaw() {
 	// This block is optional
 	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{"./cache", 60}
+	quandl.CacheHandler = filecache.Handler{Life: 60}
 	v := quandl.Options{}
 	v.Set("trim_start", "2014-01-01")
 	v.Set("trim_end", "2014-01-06")
@@ -53,7 +53,7 @@ func ExampleGetSymbolRaw() {
 func ExampleGetSymbols() {
 	// This block is optional
 	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{"./cache", 60}
+	quandl.CacheHandler = filecache.Handler{Life: 60}
 	v := quandl.Options{}
 	v.Set("trim_start", "2014-01-01")
 	v.Set("trim_end", "2014-01-06")
@@ -80,7 +80,7 @@ func ExampleGetSymbols() {
 func ExampleGetList() {
 	// This block is optional
 	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{"./cache", 60}
+	quandl.CacheHandler = filecache.Handler{Life: 60}
 
 	data, err := quandl.GetList("WIKI", 1, 3)
 	if err != nil {
@@ -100,7 +100,7 @@ func ExampleGetList() {
 func ExampleGetSearch() {
 	// This block is optional
 	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{"./cache", 60}
+	quandl.CacheHandler = filecache.Handler{Life: 60}
 
 	data, err := quandl.GetSearch("google stock", 1, 3)
 	if err != nil {
@@ -116,7 +116,7 @@ func ExampleGetSearch() {
 func ExampleSymbolResponse() {
 	// This block is optional
 	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{"./cache", 60}
+	quandl.CacheHandler = filecache.Handler{Life: 60}
 	v := quandl.Options{}
 	v.Set("trim_start", "2014-01-01")
 	v.Set("trim_end", "2014-02-02")
@@ -168,7 +168,7 @@ func ExampleSymbolResponse() {
 func ExampleSymbolsResponse() {
 	// This block is optional
 	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{"./cache", 60}
+	quandl.CacheHandler = filecache.Handler{Life: 60}
 	v := quandl.Options{}
 	v.Set("trim_start", "2014-01-01")
 	v.Set("trim_end", "2014-02-02")
@@ -199,7 +199,7 @@ func ExampleSymbolsResponse() {
 func ExampleListResponse() {
 	// This block is optional
 	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{"./cache", 60}
+	quandl.CacheHandler = filecache.Handler{Life: 60}
 
 	data, err := quandl.GetList("WIKI", 2, 5)
 	if err != nil {
@@ -223,7 +223,7 @@ func ExampleListResponse() {
 func ExampleSearchResponse() {
 	// This block is optional
 	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{"./cache", 60}
+	quandl.CacheHandler = filecache.Handler{Life: 60}
 
 	data, err := quandl.GetSearch("facebook", 2, 5)
 	if err != nil {
