@@ -1,7 +1,7 @@
 Go Quandl
 =========
 
-[![GoDoc](https://godoc.org/github.com/DannyBen/quandl?status.png)](http://godoc.org/github.com/DannyBen/quandl)
+[![Build Status](https://travis-ci.org/DannyBen/quandl.svg?branch=master)](https://travis-ci.org/DannyBen/quandl) [![GoDoc](https://godoc.org/github.com/DannyBen/quandl?status.png)](http://godoc.org/github.com/DannyBen/quandl)
 
 This library provides easy access to the 
 [Quandl API](https://www.quandl.com/help/api) 
