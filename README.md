@@ -49,4 +49,7 @@ To pass options to the Quandl API, use something like this:
 	v.Set("trim_end", "2014-02-02")
 	data, err := quandl.GetSymbol("WIKI/AAPL", v)
 
-More examples are in the [quandl_test file](https://github.com/DannyBen/quandl/blob/master/quandl_test.go)
+More examples are in the 
+[quandl_test file](https://github.com/DannyBen/quandl/blob/master/quandl_test.go)
+or in the 
+[official godoc documentation](http://godoc.org/github.com/DannyBen/quandl#pkg-examples)

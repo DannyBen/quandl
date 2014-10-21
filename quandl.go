@@ -25,7 +25,7 @@ var urlTemplates map[string]string = map[string]string{
 	"symbol":  "https://www.quandl.com/api/v1/datasets/%s.%s?%s",
 	"symbols": "https://www.quandl.com/api/v1/multisets.%s?columns=%s&%s",
 	"search":  "https://www.quandl.com/api/v1/datasets.%s?%s",
-	"list":    "https://www.quandl.com/api/v2/datasets.%s?%s",
+	"list":    "http://www.quandl.com/api/v2/datasets.%s?%s",
 	// "favs":    "https://www.quandl.com/api/v1/current_user/collections/datasets/favourites.%s?auth_token=%s",
 }
 
@@ -142,6 +142,28 @@ func GetSearchRaw(query string, format string, page int, perPage int) ([]byte, e
 
 	url := getUrl("search", format, arrangeParams(params))
 	return getData(url)
+}
+
+// ToColumns converts a rows array to a columns array
+func ToColumns(src [][]interface{}) (out [][]interface{}) {
+	out = make([][]interface{}, len(src[0]))
+	for _, row := range src {
+		for j, cell := range row {
+			out[j] = append(out[j], cell)
+		}
+	}
+	return
+}
+
+// ToNamedColumns converts a rows array to a columns map
+func ToNamedColumns(src [][]interface{}, keys []string) (out map[string][]interface{}) {
+	out = make(map[string][]interface{})
+	for _, row := range src {
+		for j, cell := range row {
+			out[keys[j]] = append(out[keys[j]], cell)
+		}
+	}
+	return
 }
 
 // getData requests a URL from Quandl and returns the raw response string

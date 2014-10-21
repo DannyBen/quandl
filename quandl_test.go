@@ -8,6 +8,8 @@ import (
 
 var apiKey = "PUT_KEY_HERE"
 
+// Main Functions
+
 func ExampleGetSymbol() {
 	// This block is optional
 	quandl.ApiKey = apiKey
@@ -15,6 +17,7 @@ func ExampleGetSymbol() {
 	v := quandl.Options{}
 	v.Set("trim_start", "2014-01-01")
 	v.Set("trim_end", "2014-02-02")
+	// ---
 
 	data, err := quandl.GetSymbol("WIKI/AAPL", v)
 	if err != nil {
@@ -23,6 +26,7 @@ func ExampleGetSymbol() {
 	fmt.Printf("Symbol: %v, Row Count: %v\n", data.Code, len(data.Data))
 	fmt.Printf("Fifth column is named %v\n", data.ColumnNames[4])
 	fmt.Printf("On %v the close price was %v\n", data.Data[1][0], data.Data[1][4])
+
 	// Output:
 	// Symbol: AAPL, Row Count: 21
 	// Fifth column is named Close
@@ -37,12 +41,14 @@ func ExampleGetSymbolRaw() {
 	v.Set("trim_start", "2014-01-01")
 	v.Set("trim_end", "2014-01-06")
 	v.Set("column", "4") // Close price only
+	// ---
 
 	data, err := quandl.GetSymbolRaw("WIKI/AAPL", "csv", v)
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println(string(data))
+
 	// Output:
 	// Date,Close
 	// 2014-01-06,543.93
@@ -58,6 +64,7 @@ func ExampleGetSymbols() {
 	v.Set("trim_start", "2014-01-01")
 	v.Set("trim_end", "2014-01-06")
 	v.Set("sort_order", "asc")
+	// ---
 
 	// Get two symbols at once, only close prices (column 4)
 	symbols := []string{"WIKI/AAPL.4", "WIKI/CSCO.4"}
@@ -81,6 +88,7 @@ func ExampleGetList() {
 	// This block is optional
 	quandl.ApiKey = apiKey
 	quandl.CacheHandler = filecache.Handler{Life: 60}
+	// ---
 
 	data, err := quandl.GetList("WIKI", 1, 3)
 	if err != nil {
@@ -101,6 +109,7 @@ func ExampleGetSearch() {
 	// This block is optional
 	quandl.ApiKey = apiKey
 	quandl.CacheHandler = filecache.Handler{Life: 60}
+	// ---
 
 	data, err := quandl.GetSearch("google stock", 1, 3)
 	if err != nil {
@@ -113,6 +122,54 @@ func ExampleGetSearch() {
 	// Found 3 results
 }
 
+// ToColumns Functions
+
+func ExampleToColumns() {
+	// This block is optional
+	quandl.ApiKey = apiKey
+	quandl.CacheHandler = filecache.Handler{Life: 60}
+	v := quandl.Options{}
+	v.Set("trim_start", "2014-01-06")
+	v.Set("trim_end", "2014-01-08")
+	v.Set("column", "4")
+	// ---
+
+	data, err := quandl.GetSymbol("WIKI/AAPL", v)
+	if err != nil {
+		panic(err)
+	}
+
+	d := quandl.ToColumns(data.Data)
+	fmt.Println(d)
+
+	// Output:
+	// [[2014-01-08 2014-01-07 2014-01-06] [543.46 540.04 543.93]]
+}
+
+func ExampleToNamedColumns() {
+	// This block is optional
+	quandl.ApiKey = apiKey
+	quandl.CacheHandler = filecache.Handler{Life: 60}
+	v := quandl.Options{}
+	v.Set("trim_start", "2014-01-06")
+	v.Set("trim_end", "2014-01-07")
+	v.Set("column", "4")
+	// ---
+
+	data, err := quandl.GetSymbol("WIKI/AAPL", v)
+	if err != nil {
+		panic(err)
+	}
+
+	d := quandl.ToNamedColumns(data.Data, data.ColumnNames)
+	fmt.Println(d["Date"], d["Close"])
+
+	// Output:
+	// [2014-01-07 2014-01-06] [540.04 543.93]
+}
+
+// Response Types
+
 func ExampleSymbolResponse() {
 	// This block is optional
 	quandl.ApiKey = apiKey
@@ -120,6 +177,7 @@ func ExampleSymbolResponse() {
 	v := quandl.Options{}
 	v.Set("trim_start", "2014-01-01")
 	v.Set("trim_end", "2014-02-02")
+	// ---
 
 	data, err := quandl.GetSymbol("WIKI/MSFT", v)
 	if err != nil {
@@ -172,6 +230,7 @@ func ExampleSymbolsResponse() {
 	v := quandl.Options{}
 	v.Set("trim_start", "2014-01-01")
 	v.Set("trim_end", "2014-02-02")
+	// ---
 
 	data, err := quandl.GetSymbols([]string{"WIKI/MSFT", "WIKI/AAPL"}, v)
 	if err != nil {
@@ -200,6 +259,7 @@ func ExampleListResponse() {
 	// This block is optional
 	quandl.ApiKey = apiKey
 	quandl.CacheHandler = filecache.Handler{Life: 60}
+	// ---
 
 	data, err := quandl.GetList("WIKI", 2, 5)
 	if err != nil {
@@ -224,6 +284,7 @@ func ExampleSearchResponse() {
 	// This block is optional
 	quandl.ApiKey = apiKey
 	quandl.CacheHandler = filecache.Handler{Life: 60}
+	// ---
 
 	data, err := quandl.GetSearch("facebook", 2, 5)
 	if err != nil {
@@ -293,3 +354,140 @@ func ExampleSearchResponse() {
 	// pages.stern.nyu.edu/~adamodar/
 	// false
 }
+
+// Response Types Functions
+
+func ExampleSymbolResponse_ToColumns() {
+	// This block is optional
+	quandl.ApiKey = apiKey
+	quandl.CacheHandler = filecache.Handler{Life: 60}
+	v := quandl.Options{}
+	v.Set("trim_start", "2014-01-06")
+	v.Set("trim_end", "2014-01-08")
+	v.Set("column", "4")
+	// ---
+
+	data, err := quandl.GetSymbol("WIKI/AAPL", v)
+	if err != nil {
+		panic(err)
+	}
+
+	d := data.ToColumns()
+	fmt.Println(d)
+
+	// Output:
+	// [[2014-01-08 2014-01-07 2014-01-06] [543.46 540.04 543.93]]
+}
+
+func ExampleSymbolResponse_ToNamedColumns_1() {
+	// This block is optional
+	quandl.ApiKey = apiKey
+	quandl.CacheHandler = filecache.Handler{Life: 60}
+	v := quandl.Options{}
+	v.Set("trim_start", "2014-01-06")
+	v.Set("trim_end", "2014-01-07")
+	v.Set("column", "11")
+	// ---
+
+	data, err := quandl.GetSymbol("WIKI/AAPL", v)
+	if err != nil {
+		panic(err)
+	}
+
+	d := data.ToNamedColumns(nil)
+	fmt.Println(d["Date"], d["Adj. Close"])
+
+	// Output:
+	// [2014-01-07 2014-01-06] [75.887925954955 76.434559596842]
+}
+
+func ExampleSymbolResponse_ToNamedColumns_2() {
+	// This block is optional
+	quandl.ApiKey = apiKey
+	quandl.CacheHandler = filecache.Handler{Life: 60}
+	v := quandl.Options{}
+	v.Set("trim_start", "2014-01-06")
+	v.Set("trim_end", "2014-01-07")
+	v.Set("column", "11")
+	// ---
+
+	data, err := quandl.GetSymbol("WIKI/AAPL", v)
+	if err != nil {
+		panic(err)
+	}
+
+	d := data.ToNamedColumns([]string{"date", "close"})
+	fmt.Println(d["date"], d["close"])
+
+	// Output:
+	// [2014-01-07 2014-01-06] [75.887925954955 76.434559596842]
+}
+
+func ExampleSymbolsResponse_ToColumns() {
+	// This block is optional
+	quandl.ApiKey = apiKey
+	quandl.CacheHandler = filecache.Handler{Life: 60}
+	v := quandl.Options{}
+	v.Set("trim_start", "2014-01-06")
+	v.Set("trim_end", "2014-01-07")
+	// ---
+
+	data, err := quandl.GetSymbols([]string{"WIKI/AAPL.4", "WIKI/MSFT.4"}, v)
+	if err != nil {
+		panic(err)
+	}
+
+	d := data.ToColumns()
+	fmt.Println(d)
+
+	// Output:
+	// [[2014-01-07 2014-01-06] [540.04 543.93] [36.41 36.13]]
+}
+
+func ExampleSymbolsResponse_ToNamedColumns_1() {
+	// This block is optional
+	quandl.ApiKey = apiKey
+	quandl.CacheHandler = filecache.Handler{Life: 60}
+	v := quandl.Options{}
+	v.Set("trim_start", "2014-01-06")
+	v.Set("trim_end", "2014-01-07")
+	// ---
+
+	data, err := quandl.GetSymbols([]string{"WIKI/AAPL.11", "WIKI/MSFT.11"}, v)
+	if err != nil {
+		panic(err)
+	}
+
+	d := data.ToNamedColumns(nil)
+	fmt.Println(d["Date"], d["WIKI.MSFT - Adj. Close"], d["WIKI.AAPL - Adj. Close"])
+
+	// Output:
+	// [2014-01-07 2014-01-06] [35.670620055736 35.396306031688] [75.887925954955 76.434559596842]
+}
+
+func ExampleSymbolsResponse_ToNamedColumns_2() {
+	// This block is optional
+	quandl.ApiKey = apiKey
+	quandl.CacheHandler = filecache.Handler{Life: 60}
+	v := quandl.Options{}
+	v.Set("trim_start", "2014-01-06")
+	v.Set("trim_end", "2014-01-07")
+	// ---
+
+	data, err := quandl.GetSymbols([]string{"WIKI/AAPL.11", "WIKI/MSFT.11"}, v)
+	if err != nil {
+		panic(err)
+	}
+
+	d := data.ToNamedColumns([]string{"date", "apple", "microsoft"})
+	fmt.Println(d["date"], d["apple"], d["microsoft"])
+
+	// Output:
+	// [2014-01-07 2014-01-06] [75.887925954955 76.434559596842] [35.670620055736 35.396306031688]
+}
+
+// Naming convention cheatsheet
+// Example()     Example_1()
+// ExampleF()    ExampleF_1()
+// ExampleT()    ExampleT_1()
+// ExampleT_M()  ExampleT_M_1()

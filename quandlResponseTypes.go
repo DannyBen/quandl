@@ -69,3 +69,35 @@ type Source struct {
 	Host          string
 	Premium       bool
 }
+
+// ToColumns converts the data array to a columns array
+func (s *SymbolResponse) ToColumns() [][]interface{} {
+	return ToColumns(s.Data)
+}
+
+// ToNamedColumns converts the rows array to a columns map.
+// You may provide it with an array of strings for the map keys
+// (header columns), or nil to use the column names as returned
+// from Quandl.
+func (s *SymbolResponse) ToNamedColumns(keys []string) map[string][]interface{} {
+	if keys == nil {
+		keys = s.ColumnNames
+	}
+	return ToNamedColumns(s.Data, keys)
+}
+
+// ToColumns converts the data array to a columns array
+func (s *SymbolsResponse) ToColumns() [][]interface{} {
+	return ToColumns(s.Data)
+}
+
+// ToNamedColumns converts the rows array to a columns map.
+// You may provide it with an array of strings for the map keys
+// (header columns), or nil to use the column names as returned
+// from Quandl.
+func (s *SymbolsResponse) ToNamedColumns(keys []string) map[string][]interface{} {
+	if keys == nil {
+		keys = s.ColumnNames
+	}
+	return ToNamedColumns(s.Data, keys)
+}
