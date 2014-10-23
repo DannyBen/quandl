@@ -42,6 +42,17 @@ type Cacher interface {
 	Set(key string, data []byte) error
 }
 
+// NewOptions accepts any even number of arguments and returns an
+// Options object. The odd arguments are the keys, the even arguments
+// are the values.
+func NewOptions(s ...string) Options {
+	o := Options{}
+	for i := 0; i < len(s); i += 2 {
+		o.Set(s[i], s[i+1])
+	}
+	return o
+}
+
 // GetSymbol returns data for a given symbol
 func GetSymbol(symbol string, params Options) (*SymbolResponse, error) {
 	raw, err := GetSymbolRaw(symbol, "json", params)
@@ -164,6 +175,15 @@ func ToNamedColumns(src [][]interface{}, keys []string) (out map[string][]interf
 		}
 	}
 	return
+}
+
+// FloatColumn converts a column of interface{} to a column of floats
+func FloatColumn(s []interface{}) []float64 {
+	r := make([]float64, len(s))
+	for i := range s {
+		r[i] = s[i].(float64)
+	}
+	return r
 }
 
 // getData requests a URL from Quandl and returns the raw response string

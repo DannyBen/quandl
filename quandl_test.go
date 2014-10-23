@@ -486,6 +486,32 @@ func ExampleSymbolsResponse_ToNamedColumns_2() {
 	// [2014-01-07 2014-01-06] [75.887925954955 76.434559596842] [35.670620055736 35.396306031688]
 }
 
+// Options
+
+func ExampleNewOptions() {
+	quandl.ApiKey = apiKey
+	quandl.CacheHandler = filecache.Handler{Life: 60}
+
+	opts := quandl.NewOptions(
+		"trim_start", "2014-01-01",
+		"trim_end", "2014-01-06",
+		"column", "4",
+	)
+
+	data, err := quandl.GetSymbolRaw("WIKI/AAPL", "csv", opts)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(data))
+
+	// Output:
+	// Date,Close
+	// 2014-01-06,543.93
+	// 2014-01-03,540.98
+	// 2014-01-02,553.13
+
+}
+
 // Naming convention cheatsheet
 // Example()     Example_1()
 // ExampleF()    ExampleF_1()
