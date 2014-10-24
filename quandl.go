@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // ApiKey is used to set your api key before you make any call
@@ -182,6 +183,15 @@ func FloatColumn(s []interface{}) []float64 {
 	r := make([]float64, len(s))
 	for i := range s {
 		r[i] = s[i].(float64)
+	}
+	return r
+}
+
+// TimeColumn converts a column of interface{} to a column of time
+func TimeColumn(s []interface{}) []time.Time {
+	r := make([]time.Time, len(s))
+	for i := range s {
+		r[i], _ = time.Parse("2006-01-02", s[i].(string))
 	}
 	return r
 }

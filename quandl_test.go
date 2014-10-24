@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/DannyBen/filecache"
 	"github.com/DannyBen/quandl"
+	"time"
 )
 
 var apiKey = "PUT_KEY_HERE"
@@ -166,6 +167,54 @@ func ExampleToNamedColumns() {
 
 	// Output:
 	// [2014-01-07 2014-01-06] [540.04 543.93]
+}
+
+// Column Converters
+
+func ExampleFloatColumn() {
+	quandl.ApiKey = apiKey
+	quandl.CacheHandler = filecache.Handler{Life: 60}
+
+	opts := quandl.NewOptions(
+		"trim_start", "2014-01-01",
+		"trim_end", "2014-01-06",
+		"column", "4",
+	)
+
+	data, err := quandl.GetSymbol("WIKI/AAPL", opts)
+	if err != nil {
+		panic(err)
+	}
+
+	columns := data.ToColumns()
+	var prices []float64 = quandl.FloatColumn(columns[1])
+	fmt.Println(prices)
+
+	// Output:
+	// [543.93 540.98 553.13]
+}
+
+func ExampleTimeColumn() {
+	quandl.ApiKey = apiKey
+	quandl.CacheHandler = filecache.Handler{Life: 60}
+
+	opts := quandl.NewOptions(
+		"trim_start", "2014-01-01",
+		"trim_end", "2014-01-06",
+		"column", "4",
+	)
+
+	data, err := quandl.GetSymbol("WIKI/AAPL", opts)
+	if err != nil {
+		panic(err)
+	}
+
+	columns := data.ToColumns()
+	var dates []time.Time = quandl.TimeColumn(columns[0])
+	fmt.Println(dates)
+
+	// Output:
+	// [2014-01-06 00:00:00 +0000 UTC 2014-01-03 00:00:00 +0000 UTC 2014-01-02 00:00:00 +0000 UTC]
 }
 
 // Response Types
@@ -509,7 +558,6 @@ func ExampleNewOptions() {
 	// 2014-01-06,543.93
 	// 2014-01-03,540.98
 	// 2014-01-02,553.13
-
 }
 
 // Naming convention cheatsheet
