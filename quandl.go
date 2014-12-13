@@ -23,10 +23,9 @@ var LastUrl = ""
 var CacheHandler Cacher
 
 var urlTemplates map[string]string = map[string]string{
-	"symbol":  "https://www.quandl.com/api/v1/datasets/%s.%s?%s",
-	"symbols": "https://www.quandl.com/api/v1/multisets.%s?columns=%s&%s",
-	"search":  "https://www.quandl.com/api/v1/datasets.%s?%s",
-	"list":    "http://www.quandl.com/api/v2/datasets.%s?%s",
+	"symbol": "https://www.quandl.com/api/v1/datasets/%s.%s?%s",
+	"search": "https://www.quandl.com/api/v1/datasets.%s?%s",
+	"list":   "http://www.quandl.com/api/v2/datasets.%s?%s",
 	// "favs":    "https://www.quandl.com/api/v1/current_user/collections/datasets/favourites.%s?auth_token=%s",
 }
 
@@ -58,21 +57,6 @@ func NewOptions(s ...string) Options {
 func GetSymbol(symbol string, params Options) (*SymbolResponse, error) {
 	raw, err := GetSymbolRaw(symbol, "json", params)
 	var response SymbolResponse
-	if err != nil {
-		return &response, err
-	}
-
-	err = json.Unmarshal(raw, &response)
-	if err != nil {
-		return &response, marshallerError(raw, err)
-	}
-	return &response, nil
-}
-
-// GetSymbols returns data for a symbols array
-func GetSymbols(symbols []string, params Options) (*SymbolsResponse, error) {
-	raw, err := GetSymbolsRaw(symbols, "json", params)
-	var response SymbolsResponse
 	if err != nil {
 		return &response, err
 	}
@@ -117,12 +101,6 @@ func GetSearch(query string, page int, perPage int) (*SearchResponse, error) {
 // GetSymbolRaw returns CSV, JSON or XML data for a given symbol
 func GetSymbolRaw(symbol string, format string, params Options) ([]byte, error) {
 	url := getUrl("symbol", symbol, format, arrangeParams(params))
-	return getData(url)
-}
-
-// GetSymbolsRaw returns CSV, JSON or XML data for multiple symbols
-func GetSymbolsRaw(symbols []string, format string, params Options) ([]byte, error) {
-	url := getUrl("symbols", format, symbolsToString(symbols), arrangeParams(params))
 	return getData(url)
 }
 
@@ -254,16 +232,6 @@ func arrangeParams(qs Options) string {
 		qs.Set("auth_token", ApiKey)
 	}
 	return url.Values(qs).Encode()
-}
-
-// symbolsToString converts an array of symbols to the format
-// needed for a multiset Quandl request.
-func symbolsToString(symbols []string) string {
-	var result []string
-	for _, symbol := range symbols {
-		result = append(result, strings.Replace(symbol, "/", ".", -1))
-	}
-	return strings.Join(result, ",")
 }
 
 // marshallerError returns a formatted error that includes the response

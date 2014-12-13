@@ -23,18 +23,6 @@ type SearchResponse struct {
 	Sources []Source
 }
 
-// Type SymbolsResponse represents the response from Quandl
-// when requesting multiple symbols
-type SymbolsResponse struct {
-	ColumnNames []string `json:"column_names"`
-	Data        [][]interface{}
-	Columns     []string
-	Errors      interface{}
-	Frequency   string
-	FromDate    string `json:"from_date"`
-	ToDate      string `json:"to_date"`
-}
-
 // Type Document represents an entity at Quandl.
 // It is used when requesting a symbol data, or a list of
 // symbols supported by a data source.
@@ -80,22 +68,6 @@ func (s *SymbolResponse) ToColumns() [][]interface{} {
 // (header columns), or nil to use the column names as returned
 // from Quandl.
 func (s *SymbolResponse) ToNamedColumns(keys []string) map[string][]interface{} {
-	if keys == nil {
-		keys = s.ColumnNames
-	}
-	return ToNamedColumns(s.Data, keys)
-}
-
-// ToColumns converts the data array to a columns array
-func (s *SymbolsResponse) ToColumns() [][]interface{} {
-	return ToColumns(s.Data)
-}
-
-// ToNamedColumns converts the rows array to a columns map.
-// You may provide it with an array of strings for the map keys
-// (header columns), or nil to use the column names as returned
-// from Quandl.
-func (s *SymbolsResponse) ToNamedColumns(keys []string) map[string][]interface{} {
 	if keys == nil {
 		keys = s.ColumnNames
 	}

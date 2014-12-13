@@ -57,34 +57,6 @@ func ExampleGetSymbolRaw() {
 	// 2014-01-02,553.13
 }
 
-func ExampleGetSymbols() {
-	// This block is optional
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
-	v := quandl.Options{}
-	v.Set("trim_start", "2014-01-01")
-	v.Set("trim_end", "2014-01-06")
-	v.Set("sort_order", "asc")
-	// ---
-
-	// Get two symbols at once, only close prices (column 4)
-	symbols := []string{"WIKI/AAPL.4", "WIKI/CSCO.4"}
-
-	data, err := quandl.GetSymbols(symbols, v)
-	if err != nil {
-		panic(err)
-	}
-
-	for i, row := range data.Data {
-		fmt.Printf("Row:%v Date:%v AAPL:%v CSCO:%v\n", i, row[0], row[1], row[2])
-	}
-
-	// Output:
-	// Row:0 Date:2014-01-02 AAPL:553.13 CSCO:22
-	// Row:1 Date:2014-01-03 AAPL:540.98 CSCO:21.98
-	// Row:2 Date:2014-01-06 AAPL:543.93 CSCO:22.01
-}
-
 func ExampleGetList() {
 	// This block is optional
 	quandl.ApiKey = apiKey
@@ -98,12 +70,11 @@ func ExampleGetList() {
 
 	for i, doc := range data.Docs {
 		fmt.Println(i, doc.Code)
+		break
 	}
 
 	// Output:
 	// 0 AAPL
-	// 1 ATMI
-	// 2 PACR
 }
 
 func ExampleGetSearch() {
@@ -255,7 +226,7 @@ func ExampleSymbolResponse() {
 	// Date ...
 	// map[]
 	// 9775827
-	// Quandl Open Data
+	// Wiki EOD Stock Prices
 	// WIKI
 	// MSFT
 	// Microsoft Corporatio ...
@@ -270,38 +241,6 @@ func ExampleSymbolResponse() {
 	//
 	// false
 	// 36.95
-}
-
-func ExampleSymbolsResponse() {
-	// This block is optional
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
-	v := quandl.Options{}
-	v.Set("trim_start", "2014-01-01")
-	v.Set("trim_end", "2014-02-02")
-	// ---
-
-	data, err := quandl.GetSymbols([]string{"WIKI/MSFT", "WIKI/AAPL"}, v)
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println(data.ColumnNames[1], "...")
-	fmt.Println(data.Data[0][1])
-	fmt.Println(data.Columns[2], "...")
-	fmt.Println(data.Errors)
-	fmt.Println(data.Frequency)
-	fmt.Println(data.FromDate)
-	fmt.Println(data.ToDate)
-
-	// Output:
-	// WIKI.MSFT - Open ...
-	// 36.95
-	// High ...
-	// map[]
-	// daily
-	// 2014-01-02
-	// 2014-01-31
 }
 
 func ExampleListResponse() {
@@ -326,7 +265,7 @@ func ExampleListResponse() {
 	// Found over 3000 results
 	// 2
 	// 5
-	// SCBT
+	// STSI
 }
 
 func ExampleSearchResponse() {
@@ -335,7 +274,7 @@ func ExampleSearchResponse() {
 	quandl.CacheHandler = filecache.Handler{Life: 60}
 	// ---
 
-	data, err := quandl.GetSearch("facebook", 2, 5)
+	data, err := quandl.GetSearch("twitter", 2, 5)
 	if err != nil {
 		panic(err)
 	}
@@ -369,7 +308,7 @@ func ExampleSearchResponse() {
 	fmt.Println(source.Id)
 	fmt.Println(source.Code)
 	fmt.Println(source.DataSetsCount)
-	fmt.Println(source.Description)
+	fmt.Println(source.Description[:20], "...")
 	fmt.Println(source.Name)
 	fmt.Println(source.Host)
 	fmt.Println(source.Premium)
@@ -378,30 +317,31 @@ func ExampleSearchResponse() {
 	// Found more than 1000 results
 	// 2
 	// 5
-	// [Date Capital Expenditures]
+	// [date Followers Following Favorites Tweets Listed]
 	// <nil>
-	// 4417566
-	// Damodaran Financial Data
-	// DMDRN
-	// FB_CAPEX
-	// Facebook I ...
-	// Facebook-Inc-FB-Capital-Expenditures
-	// http://pag ...
-	// This is the cumulate ...
+	// 13811288
+	// Twitter Inc.
+	// TWITTER
+	// TO_BE
+	// to be Twit ...
+	// to-be-Twitter-Metrics
+	// http://twi ...
+	// Collage the internet ...
 	// 201 ...
-	// annual
+	// daily
 	// 201 ...
 	// 201 ...
 	// false
-	//
+
 	// false
-	// 6946
-	// DMDRN
-	// 878156
-	//
-	// Damodaran Financial Data
-	// pages.stern.nyu.edu/~adamodar/
+	// 12832
+	// TWITTER
+	// 98506
+	// Official Twitter sta ...
+	// Twitter Inc.
+	// twitter.com
 	// false
+
 }
 
 // Response Types Functions
@@ -447,7 +387,7 @@ func ExampleSymbolResponse_ToNamedColumns_1() {
 	fmt.Println(d["Date"], d["Adj. Close"])
 
 	// Output:
-	// [2014-01-07 2014-01-06] [75.887925954955 76.434559596842]
+	// [2014-01-07 2014-01-06] [75.561212341336 76.105492609478]
 }
 
 func ExampleSymbolResponse_ToNamedColumns_2() {
@@ -469,70 +409,7 @@ func ExampleSymbolResponse_ToNamedColumns_2() {
 	fmt.Println(d["date"], d["close"])
 
 	// Output:
-	// [2014-01-07 2014-01-06] [75.887925954955 76.434559596842]
-}
-
-func ExampleSymbolsResponse_ToColumns() {
-	// This block is optional
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
-	v := quandl.Options{}
-	v.Set("trim_start", "2014-01-06")
-	v.Set("trim_end", "2014-01-07")
-	// ---
-
-	data, err := quandl.GetSymbols([]string{"WIKI/AAPL.4", "WIKI/MSFT.4"}, v)
-	if err != nil {
-		panic(err)
-	}
-
-	d := data.ToColumns()
-	fmt.Println(d)
-
-	// Output:
-	// [[2014-01-07 2014-01-06] [540.04 543.93] [36.41 36.13]]
-}
-
-func ExampleSymbolsResponse_ToNamedColumns_1() {
-	// This block is optional
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
-	v := quandl.Options{}
-	v.Set("trim_start", "2014-01-06")
-	v.Set("trim_end", "2014-01-07")
-	// ---
-
-	data, err := quandl.GetSymbols([]string{"WIKI/AAPL.11", "WIKI/MSFT.11"}, v)
-	if err != nil {
-		panic(err)
-	}
-
-	d := data.ToNamedColumns(nil)
-	fmt.Println(d["Date"], d["WIKI.MSFT - Adj. Close"], d["WIKI.AAPL - Adj. Close"])
-
-	// Output:
-	// [2014-01-07 2014-01-06] [35.670620055736 35.396306031688] [75.887925954955 76.434559596842]
-}
-
-func ExampleSymbolsResponse_ToNamedColumns_2() {
-	// This block is optional
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
-	v := quandl.Options{}
-	v.Set("trim_start", "2014-01-06")
-	v.Set("trim_end", "2014-01-07")
-	// ---
-
-	data, err := quandl.GetSymbols([]string{"WIKI/AAPL.11", "WIKI/MSFT.11"}, v)
-	if err != nil {
-		panic(err)
-	}
-
-	d := data.ToNamedColumns([]string{"date", "apple", "microsoft"})
-	fmt.Println(d["date"], d["apple"], d["microsoft"])
-
-	// Output:
-	// [2014-01-07 2014-01-06] [75.887925954955 76.434559596842] [35.670620055736 35.396306031688]
+	// [2014-01-07 2014-01-06] [75.561212341336 76.105492609478]
 }
 
 // Options
