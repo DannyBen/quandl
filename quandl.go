@@ -196,6 +196,15 @@ func TimeColumn(s []interface{}) []time.Time {
 	return r
 }
 
+// StringColumn converts a column of interface{} to a column of string
+func StringColumn(s []interface{}) []string {
+	r := make([]string, len(s))
+	for i := range s {
+		r[i] = s[i].(string)
+	}
+	return r
+}
+
 // getData requests a URL from Quandl and returns the raw response string
 func getData(url string) ([]byte, error) {
 	if CacheHandler != nil {
