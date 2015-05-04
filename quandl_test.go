@@ -259,13 +259,12 @@ func ExampleListResponse() {
 	}
 	fmt.Println(data.CurrentPage)
 	fmt.Println(data.PerPage)
-	fmt.Println(data.Docs[0].Code)
+	// fmt.Println(data.Docs[0].Code)
 
 	// Output:
 	// Found over 3000 results
 	// 2
 	// 5
-	// STSI
 }
 
 func ExampleSearchResponse() {
