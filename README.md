@@ -1,7 +1,9 @@
 Go Quandl
-=========
+==================================================
 
 [![Build Status](https://travis-ci.org/DannyBen/quandl.svg?branch=master)](https://travis-ci.org/DannyBen/quandl) [![GoDoc](https://godoc.org/github.com/DannyBen/quandl?status.png)](http://godoc.org/github.com/DannyBen/quandl)
+
+---
 
 This library provides easy access to the 
 [Quandl API](https://www.quandl.com/help/api) 
@@ -10,21 +12,26 @@ using the Go programming language.
 The full documentation is at:  
 [godoc.org/github.com/DannyBen/quandl](http://godoc.org/github.com/DannyBen/quandl)
 
+---
+
 Install
--------
+--------------------------------------------------
 
 	$ go get github.com/DannyBen/quandl
 
+
 Features
---------
+--------------------------------------------------
 
 * Supports 3 call types to Quandl: `GetSymbol`, `GetList` and `GetSearch`.
 * Returns either a native [Go object](https://github.com/DannyBen/quandl/blob/master/quandlResponseTypes.go), or a raw (CSV/JSON/XML)
   response.
 * Built in cache handling.
 
+
 Usage
------
+--------------------------------------------------
+
 Basic usage looks like this:
 
 	quandl.ApiKey = "YOUR KEY"
@@ -53,3 +60,12 @@ More examples are in the
 [quandl_test file](https://github.com/DannyBen/quandl/blob/master/quandl_test.go)
 or in the 
 [official godoc documentation](http://godoc.org/github.com/DannyBen/quandl#pkg-examples)
+
+
+Development
+--------------------------------------------------
+
+Before running tests, set your API key in an environment variable.
+
+	$ export QUANDL_KEY=your_key_here
+	$ go test
