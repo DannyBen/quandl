@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"github.com/DannyBen/filecache"
 	"github.com/DannyBen/quandl"
+	"os"
 	"time"
 )
 
-var apiKey = "PUT_KEY_HERE"
+var apiKey = os.Getenv("QUANDL_KEY")
 
 // Main Functions
 
@@ -31,7 +32,7 @@ func ExampleGetSymbol() {
 	// Output:
 	// Symbol: AAPL, Row Count: 21
 	// Fifth column is named Close
-	// On 2014-01-30 the close price was 499.78
+	// On 2014-01-30 the close price was 499.782
 }
 
 func ExampleGetSymbolRaw() {
@@ -74,7 +75,7 @@ func ExampleGetList() {
 	}
 
 	// Output:
-	// 0 AAPL
+	// 0 FLWS
 }
 
 func ExampleGetSearch() {
@@ -115,7 +116,7 @@ func ExampleToColumns() {
 	fmt.Println(d)
 
 	// Output:
-	// [[2014-01-08 2014-01-07 2014-01-06] [543.46 540.04 543.93]]
+	// [[2014-01-08 2014-01-07 2014-01-06] [543.46 540.0375 543.93]]
 }
 
 func ExampleToNamedColumns() {
@@ -137,7 +138,7 @@ func ExampleToNamedColumns() {
 	fmt.Println(d["Date"], d["Close"])
 
 	// Output:
-	// [2014-01-07 2014-01-06] [540.04 543.93]
+	// [2014-01-07 2014-01-06] [540.0375 543.93]
 }
 
 // Column Converters
@@ -364,7 +365,7 @@ func ExampleSymbolResponse_ToColumns() {
 	fmt.Println(d)
 
 	// Output:
-	// [[2014-01-08 2014-01-07 2014-01-06] [543.46 540.04 543.93]]
+	// [[2014-01-08 2014-01-07 2014-01-06] [543.46 540.0375 543.93]]
 }
 
 func ExampleSymbolResponse_ToNamedColumns_1() {
@@ -386,7 +387,7 @@ func ExampleSymbolResponse_ToNamedColumns_1() {
 	fmt.Println(d["Date"], d["Adj. Close"])
 
 	// Output:
-	// [2014-01-07 2014-01-06] [75.561212341336 76.105492609478]
+	// [2014-01-07 2014-01-06] [73.451508457897 73.98093464899]
 }
 
 func ExampleSymbolResponse_ToNamedColumns_2() {
@@ -408,7 +409,7 @@ func ExampleSymbolResponse_ToNamedColumns_2() {
 	fmt.Println(d["date"], d["close"])
 
 	// Output:
-	// [2014-01-07 2014-01-06] [75.561212341336 76.105492609478]
+	// [2014-01-07 2014-01-06] [73.451508457897 73.98093464899]
 }
 
 // Options
