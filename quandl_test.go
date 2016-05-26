@@ -69,13 +69,14 @@ func ExampleGetList() {
 		panic(err)
 	}
 
-	for i, doc := range data.Docs {
-		fmt.Println(i, doc.Code)
-		break
-	}
+  for i, doc := range data.Docs {
+    fmt.Println(i, doc.SourceCode, doc.ColumnNames[1])
+  }
 
 	// Output:
-	// 0 CTRL
+	// 0 WIKI Open
+	// 1 WIKI Open
+	// 2 WIKI Open
 }
 
 func ExampleGetSearch() {
