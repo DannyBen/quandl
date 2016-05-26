@@ -75,7 +75,7 @@ func ExampleGetList() {
 	}
 
 	// Output:
-	// 0 FLWS
+	// 0 CTRL
 }
 
 func ExampleGetSearch() {
