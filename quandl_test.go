@@ -69,9 +69,9 @@ func ExampleGetList() {
 		panic(err)
 	}
 
-  for i, doc := range data.Docs {
-    fmt.Println(i, doc.SourceCode, doc.ColumnNames[1])
-  }
+	for i, doc := range data.Docs {
+		fmt.Println(i, doc.SourceCode, doc.ColumnNames[1])
+	}
 
 	// Output:
 	// 0 WIKI Open
