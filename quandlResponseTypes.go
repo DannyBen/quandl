@@ -18,10 +18,7 @@ type ListResponse struct {
 // when submitting a search request
 type SearchResponse struct {
 	ListResponse
-	Sources []Source
 }
-
-
 
 // Type Document represents an entity at Quandl.
 // It is used when requesting a symbol data, or a list of
@@ -59,38 +56,6 @@ type ResponseMeta struct {
 	NextPage 		int 	`json:"next_page"`
 	CurrentFirstItem int 	`json:"current_first_item"`
 	CurrentLastItem int 	`json:"current_last_item"`
-}
-
-type DocumentOld struct {
-	ColumnNames []string `json:"column_names"`
-	Errors      interface{}
-	Id          int
-	SourceName  string `json:"source_name"`
-	SourceCode  string `json:"source_code"`
-	Code        string
-	Name        string
-	UrlizeName  string `json:"urlize_name"`
-	DisplayUrl  string `json:"display_url"`
-	Description string
-	UpdatedAt   string `json:"updated_at"`
-	Frequency   string
-	FromDate    string `json:"from_date"`
-	ToDate      string `json:"to_date"`
-	Private     bool
-	Type        string
-	Premium     bool
-}
-
-// Type Source represents a data source.
-// Used by Search Response
-type Source struct {
-	Id            int
-	Code          string
-	DataSetsCount int `json:"datasets_count"`
-	Description   string
-	Name          string
-	Host          string
-	Premium       bool
 }
 
 // ToColumns converts the data array to a columns array

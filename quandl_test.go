@@ -301,15 +301,6 @@ func ExampleSearchResponse() {
 	fmt.Println(doc.Order)
 	fmt.Println(doc.DatabaseId)
 
-	source := data.Sources[0]
-	fmt.Println(source.Id)
-	fmt.Println(source.Code)
-	fmt.Println(source.DataSetsCount)
-	fmt.Println(source.Description[:20], "...")
-	fmt.Println(source.Name)
-	fmt.Println(source.Host)
-	fmt.Println(source.Premium)
-
 	// Output:
 	// Found more than 1000 results
 	// 2
