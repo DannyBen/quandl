@@ -3,17 +3,15 @@ package quandl
 // Type SymbolResponse represents the response from Quandl
 // when requesting a single symbol
 type SymbolResponse struct {
-	Document
+	Dataset
 	Data [][]interface{}
 }
 
 // Type ListResponse represents the response received when
 // requesting a list of supported symbol in a data source
 type ListResponse struct {
-	TotalCount  int `json:"total_count"`
-	CurrentPage int `json:"current_page"`
-	PerPage     int `json:"per_page"`
-	Docs        []Document
+	Datasets 	[]Dataset
+	Meta 		ResponseMeta
 }
 
 // Type SearchResponse represents the response received
@@ -23,10 +21,47 @@ type SearchResponse struct {
 	Sources []Source
 }
 
+
+
 // Type Document represents an entity at Quandl.
 // It is used when requesting a symbol data, or a list of
 // symbols supported by a data source.
-type Document struct {
+type Dataset struct {
+	Id          int
+	DatasetCode string 	`json:"dataset_code"`
+	DatabaseCode string `json:"database_code"`
+	Name        string
+	Description string
+	RefreshedAt string  `json:"refreshed_at"`
+	NewestAvailableDate string `json:"newest_available_date"`
+	OldestAvailableDate string `json:"oldest_available_date"`
+	ColumnNames []string `json:"column_names"`
+	Frequency   string
+	Type        string // TODO change because of language keyword?
+	Premium     bool
+	Limit 		int // TODO
+	Transform 	string
+	ColumnIndex int // TODO
+	StartDate 	string 	`json:"start_date"`
+	EndDate 	string 	`json:"end_date"`
+	Collapse 	string
+	Order		string
+	DatabaseId 	uint
+}
+
+type ResponseMeta struct {
+	PerPage 		int 	`json:"per_page"`
+	Query 			string
+	CurrentPage 	int 	`json:"current_page"`
+	PrevPage 		int 	`json:"prev_page"`
+	TotalPages 		uint 	`json:"total_pages"`
+	TotalCount 		uint 	`json:"total_count"`
+	NextPage 		int 	`json:"next_page"`
+	CurrentFirstItem int 	`json:"current_first_item"`
+	CurrentLastItem int 	`json:"current_last_item"`
+}
+
+type DocumentOld struct {
 	ColumnNames []string `json:"column_names"`
 	Errors      interface{}
 	Id          int

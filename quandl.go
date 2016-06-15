@@ -23,9 +23,9 @@ var LastUrl = ""
 var CacheHandler Cacher
 
 var urlTemplates map[string]string = map[string]string{
-	"symbol": "https://www.quandl.com/api/v1/datasets/%s.%s?%s",
-	"search": "https://www.quandl.com/api/v1/datasets.%s?%s",
-	"list":   "https://www.quandl.com/api/v2/datasets.%s?%s",
+	"symbol": "https://www.quandl.com/api/v3/datasets/%s.%s?%s",
+	"search": "https://www.quandl.com/api/v3/datasets.%s?%s",
+	"list":   "https://www.quandl.com/api/v3/datasets.%s?%s",
 	// "favs":    "https://www.quandl.com/api/v1/current_user/collections/datasets/favourites.%s?auth_token=%s",
 }
 
@@ -56,16 +56,18 @@ func NewOptions(s ...string) Options {
 // GetSymbol returns data for a given symbol
 func GetSymbol(symbol string, params Options) (*SymbolResponse, error) {
 	raw, err := GetSymbolRaw(symbol, "json", params)
-	var response SymbolResponse
+	var response struct {
+		Dataset SymbolResponse
+	}
 	if err != nil {
-		return &response, err
+		return &response.Dataset, err
 	}
 
 	err = json.Unmarshal(raw, &response)
 	if err != nil {
-		return &response, marshallerError(raw, err)
+		return &response.Dataset, marshallerError(raw, err)
 	}
-	return &response, nil
+	return &response.Dataset, nil
 }
 
 // GetList returns a list of symbols for a source
@@ -109,7 +111,7 @@ func GetListRaw(source string, format string, page int, perPage int) ([]byte, er
 	params := Options{}
 
 	params.Set("query", "*")
-	params.Set("source_code", source)
+	params.Set("database_code", source)
 	params.Set("per_page", strconv.Itoa(perPage))
 	params.Set("page", strconv.Itoa(page))
 
@@ -229,7 +231,7 @@ func arrangeParams(qs Options) string {
 		qs = Options{}
 	}
 	if ApiKey != "" {
-		qs.Set("auth_token", ApiKey)
+		qs.Set("api_key", ApiKey)
 	}
 	return url.Values(qs).Encode()
 }
