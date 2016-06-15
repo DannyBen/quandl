@@ -1,31 +1,31 @@
-package quandl_test
+package quandl
 
 import (
-	"fmt"
 	"github.com/DannyBen/filecache"
-	"github.com/DannyBen/quandl"
+
+	"fmt"
 	"os"
 	"time"
 )
 
-var apiKey = os.Getenv("QUANDL_KEY")
+func init() {
+	ApiKey = os.Getenv("QUANDL_KEY")
+}
 
 // Main Functions
-
 func ExampleGetSymbol() {
 	// This block is optional
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
-	v := quandl.Options{}
-	v.Set("trim_start", "2014-01-01")
-	v.Set("trim_end", "2014-02-02")
+	CacheHandler = filecache.Handler{Life: 60}
+	v := Options{}
+	v.Set("start_date", "2014-01-01")
+	v.Set("end_date", "2014-02-02")
 	// ---
 
-	data, err := quandl.GetSymbol("WIKI/AAPL", v)
+	data, err := GetSymbol("WIKI/AAPL", v)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("Symbol: %v, Row Count: %v\n", data.Code, len(data.Data))
+	fmt.Printf("Symbol: %v, Row Count: %v\n", data.DatasetCode, len(data.Data))
 	fmt.Printf("Fifth column is named %v\n", data.ColumnNames[4])
 	fmt.Printf("On %v the close price was %v\n", data.Data[1][0], data.Data[1][4])
 
@@ -37,15 +37,14 @@ func ExampleGetSymbol() {
 
 func ExampleGetSymbolRaw() {
 	// This block is optional
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
-	v := quandl.Options{}
-	v.Set("trim_start", "2014-01-01")
-	v.Set("trim_end", "2014-01-06")
-	v.Set("column", "4") // Close price only
+	CacheHandler = filecache.Handler{Life: 60}
+	v := Options{}
+	v.Set("start_date", "2014-01-01")
+	v.Set("end_date", "2014-01-06")
+	v.Set("column_index", "4") // Close price only
 	// ---
 
-	data, err := quandl.GetSymbolRaw("WIKI/AAPL", "csv", v)
+	data, err := GetSymbolRaw("WIKI/AAPL", "csv", v)
 	if err != nil {
 		panic(err)
 	}
@@ -60,17 +59,16 @@ func ExampleGetSymbolRaw() {
 
 func ExampleGetList() {
 	// This block is optional
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
+	CacheHandler = filecache.Handler{Life: 60}
 	// ---
 
-	data, err := quandl.GetList("WIKI", 1, 3)
+	data, err := GetList("WIKI", 1, 3)
 	if err != nil {
 		panic(err)
 	}
 
-	for i, doc := range data.Docs {
-		fmt.Println(i, doc.SourceCode, doc.ColumnNames[1])
+	for i, doc := range data.Datasets {
+		fmt.Println(i, doc.DatabaseCode, doc.ColumnNames[1])
 	}
 
 	// Output:
@@ -81,16 +79,15 @@ func ExampleGetList() {
 
 func ExampleGetSearch() {
 	// This block is optional
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
+	CacheHandler = filecache.Handler{Life: 60}
 	// ---
 
-	data, err := quandl.GetSearch("google stock", 1, 3)
+	data, err := GetSearch("google stock", 1, 3)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("Found %v results", len(data.Docs))
+	fmt.Printf("Found %v results", len(data.Datasets))
 
 	// Output:
 	// Found 3 results
@@ -100,20 +97,19 @@ func ExampleGetSearch() {
 
 func ExampleToColumns() {
 	// This block is optional
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
-	v := quandl.Options{}
-	v.Set("trim_start", "2014-01-06")
-	v.Set("trim_end", "2014-01-08")
-	v.Set("column", "4")
+	CacheHandler = filecache.Handler{Life: 60}
+	v := Options{}
+	v.Set("start_date", "2014-01-06")
+	v.Set("end_date", "2014-01-08")
+	v.Set("column_index", "4")
 	// ---
 
-	data, err := quandl.GetSymbol("WIKI/AAPL", v)
+	data, err := GetSymbol("WIKI/AAPL", v)
 	if err != nil {
 		panic(err)
 	}
 
-	d := quandl.ToColumns(data.Data)
+	d := ToColumns(data.Data)
 	fmt.Println(d)
 
 	// Output:
@@ -122,20 +118,19 @@ func ExampleToColumns() {
 
 func ExampleToNamedColumns() {
 	// This block is optional
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
-	v := quandl.Options{}
-	v.Set("trim_start", "2014-01-06")
-	v.Set("trim_end", "2014-01-07")
-	v.Set("column", "4")
+	CacheHandler = filecache.Handler{Life: 60}
+	v := Options{}
+	v.Set("start_date", "2014-01-06")
+	v.Set("end_date", "2014-01-07")
+	v.Set("column_index", "4")
 	// ---
 
-	data, err := quandl.GetSymbol("WIKI/AAPL", v)
+	data, err := GetSymbol("WIKI/AAPL", v)
 	if err != nil {
 		panic(err)
 	}
 
-	d := quandl.ToNamedColumns(data.Data, data.ColumnNames)
+	d := ToNamedColumns(data.Data, data.ColumnNames)
 	fmt.Println(d["Date"], d["Close"])
 
 	// Output:
@@ -145,22 +140,21 @@ func ExampleToNamedColumns() {
 // Column Converters
 
 func ExampleFloatColumn() {
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
+	CacheHandler = filecache.Handler{Life: 60}
 
-	opts := quandl.NewOptions(
-		"trim_start", "2014-01-01",
-		"trim_end", "2014-01-06",
-		"column", "4",
+	opts := NewOptions(
+		"start_date", "2014-01-01",
+		"end_date", "2014-01-06",
+		"column_index", "4",
 	)
 
-	data, err := quandl.GetSymbol("WIKI/AAPL", opts)
+	data, err := GetSymbol("WIKI/AAPL", opts)
 	if err != nil {
 		panic(err)
 	}
 
 	columns := data.ToColumns()
-	var prices []float64 = quandl.FloatColumn(columns[1])
+	var prices []float64 = FloatColumn(columns[1])
 	fmt.Println(prices)
 
 	// Output:
@@ -168,22 +162,21 @@ func ExampleFloatColumn() {
 }
 
 func ExampleTimeColumn() {
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
+	CacheHandler = filecache.Handler{Life: 60}
 
-	opts := quandl.NewOptions(
-		"trim_start", "2014-01-01",
-		"trim_end", "2014-01-06",
-		"column", "4",
+	opts := NewOptions(
+		"start_date", "2014-01-01",
+		"end_date", "2014-01-06",
+		"column_index", "4",
 	)
 
-	data, err := quandl.GetSymbol("WIKI/AAPL", opts)
+	data, err := GetSymbol("WIKI/AAPL", opts)
 	if err != nil {
 		panic(err)
 	}
 
 	columns := data.ToColumns()
-	var dates []time.Time = quandl.TimeColumn(columns[0])
+	var dates []time.Time = TimeColumn(columns[0])
 	fmt.Println(dates)
 
 	// Output:
@@ -194,36 +187,38 @@ func ExampleTimeColumn() {
 
 func ExampleSymbolResponse() {
 	// This block is optional
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
-	v := quandl.Options{}
-	v.Set("trim_start", "2014-01-01")
-	v.Set("trim_end", "2014-02-02")
+	CacheHandler = filecache.Handler{Life: 60}
+	v := Options{}
+	v.Set("start_date", "2014-01-01")
+	v.Set("end_date", "2014-02-02")
 	// ---
 
-	data, err := quandl.GetSymbol("WIKI/MSFT", v)
+	data, err := GetSymbol("WIKI/MSFT", v)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(data.ColumnNames[0], "...")
-	fmt.Println(data.Errors)
 	fmt.Println(data.Id)
-	fmt.Println(data.SourceName)
-	fmt.Println(data.SourceCode)
-	fmt.Println(data.Code)
-	fmt.Println(data.Name[:20], "...")
-	fmt.Println(data.UrlizeName[:20], "...")
-	fmt.Println(data.DisplayUrl)
+	fmt.Println(data.DatasetCode)
+	fmt.Println(data.DatabaseCode)
+	fmt.Println(data.Name)
 	fmt.Println(data.Description[:20], "...")
-	fmt.Println(data.UpdatedAt[:3], "...")
+	fmt.Println(data.RefreshedAt)
+	fmt.Println(data.NewestAvailableDate)
+	fmt.Println(data.OldestAvailableDate)
+	fmt.Println(data.ColumnNames[0], "...")
 	fmt.Println(data.Frequency)
-	fmt.Println(data.FromDate)
-	fmt.Println(data.ToDate[:3], "...")
-	fmt.Println(data.Private)
 	fmt.Println(data.Type)
 	fmt.Println(data.Premium)
-	fmt.Println(data.Data[0][1])
+	fmt.Println(data.Limit)
+	fmt.Println(data.Transform)
+	fmt.Println(data.ColumnIndex)
+	fmt.Println(data.StartDate)
+	fmt.Println(data.EndDate)
+	fmt.Println(data.Collapse)
+	fmt.Println(data.Order)
+	fmt.Println(data.DatabaseId)
 
+	// TODO
 	// Output:
 	// Date ...
 	// map[]
@@ -233,7 +228,7 @@ func ExampleSymbolResponse() {
 	// MSFT
 	// Microsoft Corporatio ...
 	// Microsoft-Corporatio ...
-	// http://www.quandl.com/WIKI/MSFT
+	// http://www.com/WIKI/MSFT
 	// End of day open, hig ...
 	// 201 ...
 	// daily
@@ -247,20 +242,19 @@ func ExampleSymbolResponse() {
 
 func ExampleListResponse() {
 	// This block is optional
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
+	CacheHandler = filecache.Handler{Life: 60}
 	// ---
 
-	data, err := quandl.GetList("WIKI", 2, 5)
+	data, err := GetList("WIKI", 2, 5)
 	if err != nil {
 		panic(err)
 	}
 
-	if data.TotalCount > 3000 {
+	if data.Meta.TotalCount > 3000 {
 		fmt.Println("Found over 3000 results")
 	}
-	fmt.Println(data.CurrentPage)
-	fmt.Println(data.PerPage)
+	fmt.Println(data.Meta.CurrentPage)
+	fmt.Println(data.Meta.PerPage)
 	// fmt.Println(data.Docs[0].Code)
 
 	// Output:
@@ -271,48 +265,41 @@ func ExampleListResponse() {
 
 func ExampleSearchResponse() {
 	// This block is optional
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
+	CacheHandler = filecache.Handler{Life: 60}
 	// ---
 
-	data, err := quandl.GetSearch("twitter", 2, 5)
+	data, err := GetSearch("twitter", 2, 5)
 	if err != nil {
 		panic(err)
 	}
 
-	if data.TotalCount > 1000 {
+	if data.Meta.TotalCount > 1000 {
 		fmt.Println("Found more than 1000 results")
 	}
-	fmt.Println(data.CurrentPage)
-	fmt.Println(data.PerPage)
+	fmt.Println(data.Meta.CurrentPage)
+	fmt.Println(data.Meta.PerPage)
 
-	doc := data.Docs[0]
-	fmt.Println(doc.ColumnNames)
-	fmt.Println(doc.Errors)
+	doc := data.Datasets[0]
 	fmt.Println(doc.Id)
-	fmt.Println(doc.SourceName)
-	fmt.Println(doc.SourceCode)
-	fmt.Println(doc.Code)
-	fmt.Println(doc.Name[:10], "...")
-	fmt.Println(doc.UrlizeName)
-	fmt.Println(doc.DisplayUrl[:10], "...")
+	fmt.Println(doc.DatasetCode)
+	fmt.Println(doc.DatabaseCode)
+	fmt.Println(doc.Name)
 	fmt.Println(doc.Description[:20], "...")
-	fmt.Println(doc.UpdatedAt[:3], "...")
+	fmt.Println(doc.RefreshedAt)
+	fmt.Println(doc.NewestAvailableDate)
+	fmt.Println(doc.OldestAvailableDate)
+	fmt.Println(doc.ColumnNames[0], "...")
 	fmt.Println(doc.Frequency)
-	fmt.Println(doc.FromDate[:3], "...")
-	fmt.Println(doc.ToDate[:3], "...")
-	fmt.Println(doc.Private)
 	fmt.Println(doc.Type)
 	fmt.Println(doc.Premium)
-
-	source := data.Sources[0]
-	fmt.Println(source.Id)
-	fmt.Println(source.Code)
-	fmt.Println(source.DataSetsCount)
-	fmt.Println(source.Description[:20], "...")
-	fmt.Println(source.Name)
-	fmt.Println(source.Host)
-	fmt.Println(source.Premium)
+	fmt.Println(doc.Limit)
+	fmt.Println(doc.Transform)
+	fmt.Println(doc.ColumnIndex)
+	fmt.Println(doc.StartDate)
+	fmt.Println(doc.EndDate)
+	fmt.Println(doc.Collapse)
+	fmt.Println(doc.Order)
+	fmt.Println(doc.DatabaseId)
 
 	// Output:
 	// Found more than 1000 results
@@ -349,15 +336,14 @@ func ExampleSearchResponse() {
 
 func ExampleSymbolResponse_ToColumns() {
 	// This block is optional
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
-	v := quandl.Options{}
-	v.Set("trim_start", "2014-01-06")
-	v.Set("trim_end", "2014-01-08")
-	v.Set("column", "4")
+	CacheHandler = filecache.Handler{Life: 60}
+	v := Options{}
+	v.Set("start_date", "2014-01-06")
+	v.Set("end_date", "2014-01-08")
+	v.Set("column_index", "4")
 	// ---
 
-	data, err := quandl.GetSymbol("WIKI/AAPL", v)
+	data, err := GetSymbol("WIKI/AAPL", v)
 	if err != nil {
 		panic(err)
 	}
@@ -371,15 +357,14 @@ func ExampleSymbolResponse_ToColumns() {
 
 func ExampleSymbolResponse_ToNamedColumns_1() {
 	// This block is optional
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
-	v := quandl.Options{}
-	v.Set("trim_start", "2014-01-06")
-	v.Set("trim_end", "2014-01-07")
-	v.Set("column", "11")
+	CacheHandler = filecache.Handler{Life: 60}
+	v := Options{}
+	v.Set("start_date", "2014-01-06")
+	v.Set("end_date", "2014-01-07")
+	v.Set("column_index", "11")
 	// ---
 
-	data, err := quandl.GetSymbol("WIKI/AAPL", v)
+	data, err := GetSymbol("WIKI/AAPL", v)
 	if err != nil {
 		panic(err)
 	}
@@ -393,15 +378,14 @@ func ExampleSymbolResponse_ToNamedColumns_1() {
 
 func ExampleSymbolResponse_ToNamedColumns_2() {
 	// This block is optional
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
-	v := quandl.Options{}
-	v.Set("trim_start", "2014-01-06")
-	v.Set("trim_end", "2014-01-07")
-	v.Set("column", "11")
+	CacheHandler = filecache.Handler{Life: 60}
+	v := Options{}
+	v.Set("start_date", "2014-01-06")
+	v.Set("end_date", "2014-01-07")
+	v.Set("column_index", "11")
 	// ---
 
-	data, err := quandl.GetSymbol("WIKI/AAPL", v)
+	data, err := GetSymbol("WIKI/AAPL", v)
 	if err != nil {
 		panic(err)
 	}
@@ -416,16 +400,15 @@ func ExampleSymbolResponse_ToNamedColumns_2() {
 // Options
 
 func ExampleNewOptions() {
-	quandl.ApiKey = apiKey
-	quandl.CacheHandler = filecache.Handler{Life: 60}
+	CacheHandler = filecache.Handler{Life: 60}
 
-	opts := quandl.NewOptions(
-		"trim_start", "2014-01-01",
-		"trim_end", "2014-01-06",
-		"column", "4",
+	opts := NewOptions(
+		"start_date", "2014-01-01",
+		"end_date", "2014-01-06",
+		"column_index", "4",
 	)
 
-	data, err := quandl.GetSymbolRaw("WIKI/AAPL", "csv", opts)
+	data, err := GetSymbolRaw("WIKI/AAPL", "csv", opts)
 	if err != nil {
 		panic(err)
 	}
