@@ -12,24 +12,24 @@ import (
 	"time"
 )
 
-// ApiKey is used to set your api key before you make any call
-var ApiKey = ""
+// APIKey is used to set your api key before you make any call
+var APIKey = ""
 
-// LastUrl will hold the last requested URL after each call
-var LastUrl = ""
+// LastURL will hold the last requested URL after each call
+var LastURL = ""
 
 // CacheHandler is a reference to a struct that implements the Cacher interface.
 // If set, it will use it to get documents from the cache or set to it.
 var CacheHandler Cacher
 
-var urlTemplates map[string]string = map[string]string{
+var urlTemplates = map[string]string{
 	"symbol": "https://www.quandl.com/api/v3/datasets/%s.%s?%s",
 	"search": "https://www.quandl.com/api/v3/datasets.%s?%s",
 	"list":   "https://www.quandl.com/api/v3/datasets.%s?%s",
 	// "favs":    "https://www.quandl.com/api/v1/current_user/collections/datasets/favourites.%s?auth_token=%s",
 }
 
-// Type Options is used to send additional parameters in the Quandl request
+// Options is used to send additional parameters in the Quandl request
 type Options url.Values
 
 // Set registers a key=value pair to be sent in the Quandl request
@@ -37,6 +37,7 @@ func (o Options) Set(key, value string) {
 	o[key] = []string{value}
 }
 
+// Cacher defines the interface for a custom cache handler
 type Cacher interface {
 	Get(key string) []byte
 	Set(key string, data []byte) error
@@ -102,7 +103,7 @@ func GetSearch(query string, page int, perPage int) (*SearchResponse, error) {
 
 // GetSymbolRaw returns CSV, JSON or XML data for a given symbol
 func GetSymbolRaw(symbol string, format string, params Options) ([]byte, error) {
-	url := getUrl("symbol", symbol, format, arrangeParams(params))
+	url := getURL("symbol", symbol, format, arrangeParams(params))
 	return getData(url)
 }
 
@@ -115,7 +116,7 @@ func GetListRaw(source string, format string, page int, perPage int) ([]byte, er
 	params.Set("per_page", strconv.Itoa(perPage))
 	params.Set("page", strconv.Itoa(page))
 
-	url := getUrl("list", format, arrangeParams(params))
+	url := getURL("list", format, arrangeParams(params))
 	return getData(url)
 }
 
@@ -132,7 +133,7 @@ func GetSearchRaw(query string, format string, page int, perPage int) ([]byte, e
 	params.Set("per_page", strconv.Itoa(perPage))
 	params.Set("page", strconv.Itoa(page))
 
-	url := getUrl("search", format, arrangeParams(params))
+	url := getURL("search", format, arrangeParams(params))
 	return getData(url)
 }
 
@@ -212,26 +213,26 @@ func getData(url string) ([]byte, error) {
 	return contents, nil
 }
 
-// getUrl receives a kind that points to a URL template and
+// getURL receives a kind that points to a URL template and
 // a variable number of strings, which will be replaced
 // in the template.
-func getUrl(kind string, args ...interface{}) string {
+func getURL(kind string, args ...interface{}) string {
 	template := urlTemplates[kind]
-	LastUrl = strings.Trim(fmt.Sprintf(template, args...), "&?")
-	return LastUrl
+	LastURL = strings.Trim(fmt.Sprintf(template, args...), "&?")
+	return LastURL
 }
 
 // arrangeParams takes an Options map and converts it to
 // a query string. It will also append the api key as needed.
 func arrangeParams(qs Options) string {
 	if qs == nil {
-		if ApiKey == "" {
+		if APIKey == "" {
 			return ""
 		}
 		qs = Options{}
 	}
-	if ApiKey != "" {
-		qs.Set("api_key", ApiKey)
+	if APIKey != "" {
+		qs.Set("api_key", APIKey)
 	}
 	return url.Values(qs).Encode()
 }

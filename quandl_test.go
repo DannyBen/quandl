@@ -5,11 +5,10 @@ import (
 
 	"fmt"
 	"os"
-	"time"
 )
 
 func init() {
-	ApiKey = os.Getenv("QUANDL_KEY")
+	APIKey = os.Getenv("QUANDL_KEY")
 }
 
 // Main Functions
@@ -154,7 +153,7 @@ func ExampleFloatColumn() {
 	}
 
 	columns := data.ToColumns()
-	var prices []float64 = FloatColumn(columns[1])
+	var prices = FloatColumn(columns[1])
 	fmt.Println(prices)
 
 	// Output:
@@ -176,7 +175,7 @@ func ExampleTimeColumn() {
 	}
 
 	columns := data.ToColumns()
-	var dates []time.Time = TimeColumn(columns[0])
+	var dates = TimeColumn(columns[0])
 	fmt.Println(dates)
 
 	// Output:
@@ -197,7 +196,7 @@ func ExampleSymbolResponse() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(data.Id)
+	fmt.Println(data.ID)
 	fmt.Println(data.DatasetCode)
 	fmt.Println(data.DatabaseCode)
 	fmt.Println(data.Name)
@@ -216,7 +215,7 @@ func ExampleSymbolResponse() {
 	fmt.Println(data.EndDate)
 	fmt.Println(data.Collapse)
 	fmt.Println(data.Order)
-	fmt.Println(data.DatabaseId)
+	fmt.Println(data.DatabaseID)
 
 	// TODO
 	// Output:
@@ -228,7 +227,7 @@ func ExampleSymbolResponse() {
 	// MSFT
 	// Microsoft Corporatio ...
 	// Microsoft-Corporatio ...
-	// http://www.com/WIKI/MSFT
+	// http://www.quandl.com/WIKI/MSFT
 	// End of day open, hig ...
 	// 201 ...
 	// daily
@@ -280,7 +279,7 @@ func ExampleSearchResponse() {
 	fmt.Println(data.Meta.PerPage)
 
 	doc := data.Datasets[0]
-	fmt.Println(doc.Id)
+	fmt.Println(doc.ID)
 	fmt.Println(doc.DatasetCode)
 	fmt.Println(doc.DatabaseCode)
 	fmt.Println(doc.Name)
@@ -299,7 +298,7 @@ func ExampleSearchResponse() {
 	fmt.Println(doc.EndDate)
 	fmt.Println(doc.Collapse)
 	fmt.Println(doc.Order)
-	fmt.Println(doc.DatabaseId)
+	fmt.Println(doc.DatabaseID)
 
 	// Output:
 	// Found more than 1000 results

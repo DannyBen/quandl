@@ -1,30 +1,30 @@
 package quandl
 
-// Type SymbolResponse represents the response from Quandl
+// SymbolResponse represents the response from Quandl
 // when requesting a single symbol
 type SymbolResponse struct {
 	Dataset
 	Data [][]interface{}
 }
 
-// Type ListResponse represents the response received when
+// ListResponse represents the response received when
 // requesting a list of supported symbol in a data source
 type ListResponse struct {
 	Datasets []Dataset
 	Meta     ResponseMeta
 }
 
-// Type SearchResponse represents the response received
+// SearchResponse represents the response received
 // when submitting a search request
 type SearchResponse struct {
 	ListResponse
 }
 
-// Type Document represents an entity at Quandl.
+// Dataset represents an entity at Quandl.
 // It is used when requesting a symbol data, or a list of
 // symbols supported by a data source.
 type Dataset struct {
-	Id                  int
+	ID                  int
 	DatasetCode         string `json:"dataset_code"`
 	DatabaseCode        string `json:"database_code"`
 	Name                string
@@ -38,14 +38,15 @@ type Dataset struct {
 	Premium             bool
 	Limit               int // TODO
 	Transform           string
-	ColumnIndex         int    // TODO
+	ColumnIndex         int // TODO
 	StartDate           string `json:"start_date"`
 	EndDate             string `json:"end_date"`
 	Collapse            string
 	Order               string
-	DatabaseId          uint
+	DatabaseID          uint
 }
 
+// ResponseMeta represents meta data in quandl
 type ResponseMeta struct {
 	PerPage          int `json:"per_page"`
 	Query            string
