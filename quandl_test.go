@@ -217,26 +217,27 @@ func ExampleSymbolResponse() {
 	fmt.Println(data.Order)
 	fmt.Println(data.DatabaseID)
 
-	// TODO
 	// Output:
-	// Date ...
-	// map[]
 	// 9775827
-	// Wiki EOD Stock Prices
-	// WIKI
 	// MSFT
-	// Microsoft Corporatio ...
-	// Microsoft-Corporatio ...
-	// http://www.quandl.com/WIKI/MSFT
+	// WIKI
+	// Microsoft Corporation (MSFT) Prices, Dividends, Splits and Trading Volume
 	// End of day open, hig ...
-	// 201 ...
-	// daily
+	// 2016-06-15T21:49:38.409Z
+	// 2016-06-15
 	// 1986-03-13
-	// 201 ...
+	// Date ...
+	// daily
+	// Time Series
 	// false
+	// 0
 	//
-	// false
-	// 36.95
+	// 0
+	// 2014-01-01
+	// 2014-02-02
+	//
+	// desc
+	// 0
 }
 
 func ExampleListResponse() {
