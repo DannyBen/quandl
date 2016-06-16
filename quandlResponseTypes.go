@@ -34,11 +34,11 @@ type Dataset struct {
 	OldestAvailableDate string   `json:"oldest_available_date"`
 	ColumnNames         []string `json:"column_names"`
 	Frequency           string
-	Type                string // TODO change because of language keyword?
+	Type                string
 	Premium             bool
-	Limit               int // TODO
+	Limit               int
 	Transform           string
-	ColumnIndex         int // TODO
+	ColumnIndex         int
 	StartDate           string `json:"start_date"`
 	EndDate             string `json:"end_date"`
 	Collapse            string
