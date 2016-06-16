@@ -26,7 +26,6 @@ var urlTemplates = map[string]string{
 	"symbol": "https://www.quandl.com/api/v3/datasets/%s.%s?%s",
 	"search": "https://www.quandl.com/api/v3/datasets.%s?%s",
 	"list":   "https://www.quandl.com/api/v3/datasets.%s?%s",
-	// "favs":    "https://www.quandl.com/api/v1/current_user/collections/datasets/favourites.%s?auth_token=%s",
 }
 
 // Options is used to send additional parameters in the Quandl request
